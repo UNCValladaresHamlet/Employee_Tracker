@@ -61,7 +61,7 @@ PRIMARY KEY (id)
 --step 1
 USE employee_DB;
 
-INSERT INTO department (name)
+INSERT INTO department (name) --INSERT INTO (Insert data into this table) department (name) into this column
 VALUES ('Sales'),
 ('Engineering'),
 ('Finance'),
@@ -70,7 +70,7 @@ VALUES ('Sales'),
 --step 2
 USE employee_DB; 
 
-INSERT INTO role (title, salary, department_id)
+INSERT INTO role (title, salary, department_id) --INSERT INTO (Insert data into this table) role (title, salary, department_id) into these columns
 VALUES ('Sales Lead', 100000, 1),
 ('Salesperson', 80000, 1),
 ('Lead Engineer', 150000, 2),
@@ -83,7 +83,7 @@ VALUES ('Sales Lead', 100000, 1),
 --step 3
 USE employee_DB; 
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
+INSERT INTO employee (first_name, last_name, role_id, manager_id) --INSERT INTO (Insert data into this table) employee (first_name, last_name, role_id, manager_id) into these columns
 VALUES ('Michael', 'Jordan', 1, 2),
 ('Kobe', 'Bryant', 2, 1),
 ('Steve', 'Kerr', 3, 3),

@@ -18,7 +18,7 @@ const connection = mysql.createConnection({ //create a connection to the MySQL d
 connection.connect((err) => { //call the connect() method on the connection object to connect to the MySQL database server
   if (err) throw err; //The connect() method accepts a callback function that has the err argument which provides the detailed error if any error occurred.
   // console.log(`connected as id ${connection.threadId}`);
-  console.log("ITS WORKING")
+  console.log("CONNECTED!!!!")
   init(); //when it connects, it calls this function to prompt the user for input
 });
 
@@ -51,6 +51,9 @@ const init = () =>{
             case 'View All Employees':
                 viewAllEmployees();
                 break
+            case 'Add Department':
+                addDepartment();
+                break
             case 'Exit':
                 connection.end(); //connection.end(); //To close a database connection gracefully, you call the end() method on the connection object. The end() method ensures that all remaining queries are always executed before the database connection closed.
                 console.log("CONNECTION CLOSED!!!")
@@ -63,11 +66,12 @@ const viewAllDepartments = () => {
   // console.log("DOES REACH FUNCTION!!!")
   console.log(` \n`) //NEW LINE
   const query = "SELECT * FROM department"; //SELECT, (go get from the database) *(ALL) FROM (which table are you looking at?)
-  connection.query(query, (err, res) => { //connection.query = runs this query command (SELECT * FROM department) we declared above to the database
+  connection.query(query, (err, result) => { //Querying Data in MySQL Database from Node.js 
+    //connection.query = Query function runs this query command (SELECT * FROM department) we declared above to the database
     if (err) throw err;
-    // console.log(res) returns a raw data packet from employee_DB database 
+    // console.log(result) returns a raw data packet from employee_DB database 
     console.log('VIEW ALL DEPARTMENTS')
-    console.table(res); //Prints MySQL rows to the console. The console.table() method writes a table in the console view. The first parameter is required, and must be either an object, or an array, containing data to fill the table.
+    console.table(result); //Prints MySQL rows to the console. The console.table() method writes a table in the console view. The first parameter is required, and must be either an object, or an array, containing data to fill the table.
     init(); //calls init function to make sure USER doesn't want to see/verify any particular data before choosing to exit
   })
 };
@@ -76,10 +80,10 @@ const viewAllRoles = () => {
   // console.log("DOES REACH FUNCTION!!!")
   console.log(` \n`) //NEW LINE
   const query = "SELECT * FROM role"; //SELECT, (go get from the database) *(ALL) FROM (which table are you looking at?) 
-  connection.query(query, (err, res) => {   ////connection.query = runs this query command (SELECT * FROM role) we declared above
+  connection.query(query, (err, result) => {   ////connection.query = runs this query command (SELECT * FROM role) we declared above
     if (err) throw err; 
     console.log('VIEW ALL ROLES')
-    console.table(res);
+    console.table(result);
     console.log('\n')
     init();
   })
@@ -89,11 +93,30 @@ const viewAllEmployees = () => {
   // console.log("DOES REACH FUNCTION!!!")
   console.log(` \n`) //NEW LINE
   const query = "SELECT * FROM employee"; //SELECT, (go get from the database) *(ALL) FROM (which table are you looking at?)
-  connection.query(query, (err, res) => { ////connection.query = runs this query command (SELECT * FROM employee) we declared above
+  connection.query(query, (err, result) => { ////connection.query = runs this query command (SELECT * FROM employee) we declared above
     if (err) throw err;
     console.log('VIEW ALL EMPLOYEES')
-    console.table(res);
+    console.table(result);
     console.log('\n')
     init();
+  })
+};
+
+const addDepartment = () => {
+    inquirer
+    .prompt([
+      {
+          name: 'newDepartment',
+          type: 'input',
+          message: 'What is the name of the department you are creating?'
+      }
+  ]).then((answer) => {
+    const query = "INSERT INTO department (name) VALUES (?)";
+      connection.query(query, answer.newDepartment, (err, res) => {
+              if (err) throw err;
+              // console.log("FUNCTION WORKS AND INPUT VALUE GETS ADDED INTO employee_DB database")
+              console.log(`NEW DEPARTMENT WAS CREATED: ${(answer.newDepartment)}`)
+              init();
+          })
   })
 };

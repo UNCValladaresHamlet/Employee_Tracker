@@ -54,6 +54,9 @@ const init = () =>{
             case 'Add Department':
                 addDepartment();
                 break
+            case 'Add Role':
+                addRole();
+                break
             case 'Exit':
                 connection.end(); //connection.end(); //To close a database connection gracefully, you call the end() method on the connection object. The end() method ensures that all remaining queries are always executed before the database connection closed.
                 console.log("CONNECTION CLOSED!!!")
@@ -106,17 +109,65 @@ const addDepartment = () => {
     inquirer
     .prompt([
       {
-          name: 'newDepartment',
+          name: 'department',
           type: 'input',
           message: 'What is the name of the department you are creating?'
       }
   ]).then((answer) => {
     const query = "INSERT INTO department (name) VALUES (?)";
-      connection.query(query, answer.newDepartment, (err, res) => {
+      connection.query(query, answer.department, (err, res) => {
               if (err) throw err;
               // console.log("FUNCTION WORKS AND INPUT VALUE GETS ADDED INTO employee_DB database")
-              console.log(`NEW DEPARTMENT WAS CREATED: ${(answer.newDepartment)}`)
+              console.log('\n')
+              console.log(`NEW DEPARTMENT WAS CREATED: ${(answer.department)}`)
+              console.log('\n')
+
               init();
           })
   })
 };
+
+
+const addRole = () => {
+  
+  connection.query(`SELECT * FROM department`, (err, result) => {
+    if (err) throw err;
+    const departmentChoices = result.map(function (department) {
+      return {
+        value: department.id,
+        name: department.name,
+      };
+    });
+
+    
+  inquirer
+  .prompt([
+    {
+      name: "title",
+      type: "input",
+      message: "What is the name of the new role you are creating?"
+    },
+    {
+      name: "salary",
+      type: "input",
+      message: "What is the salary that the new role makes?"
+    },
+    {
+      name: "department",
+      type: "list",
+      message: "Which department is this new role in?",
+      choices: departmentChoices
+    },
+  ]).then((answer) => {
+    console.log("answer:", answer)
+  const query = "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)";
+    connection.query(query,[answer.title, answer.salary, answer.department], (err, res) => {
+            if (err) throw err;
+            // console.log("FUNCTION WORKS AND INPUT VALUE GETS ADDED INTO employee_DB database")
+            // console.log(`NEW DEPARTMENT WAS CREATED: ${(answer.newDepartment)}`)
+            init();
+        })
+})
+});
+};
+

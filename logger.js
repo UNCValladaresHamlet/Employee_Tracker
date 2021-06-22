@@ -136,7 +136,6 @@ const addRole = () => {
       return {
         name: department.name,
         value: department.id,
-
       };
     });
   inquirer

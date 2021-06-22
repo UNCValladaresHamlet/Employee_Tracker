@@ -25,6 +25,7 @@ USE employee_DB;
 --DEFAULT - Sets a default value for a column if no value is specified.
 --A foreign key with cascade delete means that if a record in the parent table is deleted, then the corresponding records in the child table will automatically be deleted. This is called a cascade delete in SQL Server.
 
+--INITIAL STEP TO CREATING DATABASE
 DROP DATABASE IF EXISTS employee_DB;
 CREATE database employee_DB;
 
@@ -93,6 +94,7 @@ VALUES ('Michael', 'Jordan', 1, 2),
 
 --If you want to select all the fields available in the table, 
 --use the following syntax: SELECT * FROM table_name;
+--SELECT, (go get from the database) *(ALL) FROM (which table are you looking at?),
 
 SELECT * FROM department; 
 

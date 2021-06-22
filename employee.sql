@@ -55,16 +55,19 @@ PRIMARY KEY (id)
 
 
 --Insert Values into tables
---Step by step
-USE employee_DB; --step 1
 
-INSERT INTO department(name)
+--Step by step
+--step 1
+USE employee_DB;
+
+INSERT INTO department (name)
 VALUES ('Sales'),
 ('Engineering'),
+('Finance'),
 ('Legal');
 
-
-USE employee_DB; --step 2
+--step 2
+USE employee_DB; 
 
 INSERT INTO role (title, salary, department_id)
 VALUES ('Sales Lead', 100000, 1),
@@ -75,7 +78,9 @@ VALUES ('Sales Lead', 100000, 1),
 ('Legal Team Lead', 250000, 4),
 ('Lawyer', 190000, 4);
 
-USE employee_DB; --step 3
+
+--step 3
+USE employee_DB; 
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ('Michael', 'Jordan', 1, 2),

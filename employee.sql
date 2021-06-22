@@ -95,5 +95,7 @@ VALUES ('Michael', 'Jordan', 1, 2),
 --use the following syntax: SELECT * FROM table_name;
 
 SELECT * FROM department; 
+
 SELECT * FROM role;
+
 SELECT * FROM employee;

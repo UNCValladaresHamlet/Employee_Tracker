@@ -9,7 +9,6 @@ const connection = mysql.createConnection({ //create a connection to the MySQL d
   host: 'localhost',
   port: 3306, // Your port, if not 3306
   user: 'root',// Your username
-  password: 'G@lpaHV93*!!',  // Be sure to update with your own MySQL password!
   database: 'employee_db', //Verify which database you are using!!!
 });
 

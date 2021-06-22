@@ -132,14 +132,13 @@ const addRole = () => {
   
   connection.query(`SELECT * FROM department`, (err, result) => {
     if (err) throw err;
-    const departmentChoices = result.map(function (department) {
+    const departmentChoices = result.map(department => {
       return {
-        value: department.id,
         name: department.name,
+        value: department.id,
+
       };
     });
-
-    
   inquirer
   .prompt([
     {

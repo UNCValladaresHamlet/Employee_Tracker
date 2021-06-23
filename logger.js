@@ -157,12 +157,13 @@ const addRole = () => {
       choices: departmentChoices
     },
   ]).then((answer) => {
-    console.log("answer:", answer)
   const query = "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)";
     connection.query(query,[answer.title, answer.salary, answer.department], (err, res) => {
             if (err) throw err;
             // console.log("FUNCTION WORKS AND INPUT VALUE GETS ADDED INTO employee_DB database")
-            // console.log(`NEW DEPARTMENT WAS CREATED: ${(answer.newDepartment)}`)
+            console.log('\n')
+            console.log(`NEW ROLE WAS CREATED: ${answer.title} ${answer.salary} ${answer.department} `);
+            console.log('\n')
             init();
         })
 })

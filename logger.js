@@ -57,6 +57,9 @@ const init = () =>{
             case 'Add Role':
                 addRole();
                 break
+            case 'Add Employee':
+                addEmployee();
+                  break
             case 'Exit':
                 connection.end(); //connection.end(); //To close a database connection gracefully, you call the end() method on the connection object. The end() method ensures that all remaining queries are always executed before the database connection closed.
                 console.log("CONNECTION CLOSED!!!")
@@ -160,7 +163,6 @@ const addRole = () => {
   const query = "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)";
     connection.query(query,[answer.title, answer.salary, answer.department], (err, res) => {
             if (err) throw err;
-            // console.log("FUNCTION WORKS AND INPUT VALUE GETS ADDED INTO employee_DB database")
             console.log('\n')
             console.log(`NEW ROLE WAS CREATED: ${answer.title} ${answer.salary} ${answer.department} `);
             console.log('\n')
@@ -170,3 +172,53 @@ const addRole = () => {
 });
 };
 
+const addEmployee = () => {
+
+  connection.query(`SELECT * FROM role`, (err, results) => {
+      if (err) throw err;
+      const jobRoleChoices = results.map(role => {
+        return {
+          name: role.title,
+          value: role.id,
+        }
+      })
+      inquirer.prompt([
+          {
+            name: "first_name",
+            type: "input",
+            message: "What is the employees first name?",
+          },
+          {
+            name: "last_name",
+            type: "input",
+            message: "What is the employees last name?",
+          },
+          {
+            name: "manager_id",
+            type: "input",
+            message: "What is the employees manager ID?",
+          },
+          {
+            name: "role_id",
+            type: "list",
+            message: "What is the employees role?",
+            choices: jobRoleChoices,
+          },
+        ])
+        .then((answer) => {
+          const query = "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)";
+          connection.query(query,[answer.first_name, answer.last_name, answer.manager_id, answer.role_id], (err) => {
+              if (err) throw err;
+              console.log('\n')
+              // console.table(results);
+
+              // console.log(`NEW EMPLOYEE WAS CREATED: ${answer.first_name} ${answer.last_name} ${answer.manager_id} ${answer.role_id} `);
+              console.log('\n')
+              init();
+            }
+          )
+        })
+    }
+  )
+
+}

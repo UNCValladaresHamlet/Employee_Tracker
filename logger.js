@@ -260,6 +260,7 @@ const updateEmployeeRole = () => {
                   connection.query("UPDATE employee SET ? WHERE ?",[{role_id: answer.role_id},{id: answer.employee_id}], (err) => 
                   {if (err) throw err;
                   console.log(`EMPLOYEE ROLE CHANGED`);
+                  init();
                   });
               });
       })

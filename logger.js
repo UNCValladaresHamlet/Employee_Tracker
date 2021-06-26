@@ -60,6 +60,9 @@ const init = () =>{
             case 'Add Employee':
                 addEmployee();
                   break
+            case 'Update Employee Role':
+                updateEmployeeRole();
+                  break
             case 'Exit':
                 connection.end(); //connection.end(); //To close a database connection gracefully, you call the end() method on the connection object. The end() method ensures that all remaining queries are always executed before the database connection closed.
                 console.log("CONNECTION CLOSED!!!")
@@ -109,6 +112,7 @@ const viewAllEmployees = () => {
 };
 
 const addDepartment = () => {
+
     inquirer
     .prompt([
       {
@@ -117,8 +121,8 @@ const addDepartment = () => {
           message: 'What is the name of the department you are creating?'
       }
   ]).then((answer) => {
-    const query = "INSERT INTO department (name) VALUES (?)";
-      connection.query(query, answer.department, (err, res) => {
+    const query = "INSERT INTO department (name) VALUES (?)"; //sql statement
+      connection.query(query, answer.department, (err, res) => { //inserting into database
               if (err) throw err;
               // console.log("FUNCTION WORKS AND INPUT VALUE GETS ADDED INTO employee_DB database")
               console.log('\n')
@@ -133,9 +137,9 @@ const addDepartment = () => {
 
 const addRole = () => {
   
-  connection.query(`SELECT * FROM department`, (err, result) => {
+  connection.query(`SELECT * FROM department`, (err, results) => {
     if (err) throw err;
-    const departmentChoices = result.map(department => {
+    const departmentChoices = results.map(department => {
       return {
         name: department.name,
         value: department.id,
@@ -210,9 +214,7 @@ const addEmployee = () => {
           connection.query(query,[answer.first_name, answer.last_name, answer.manager_id, answer.role_id], (err) => {
               if (err) throw err;
               console.log('\n')
-              // console.table(results);
-
-              // console.log(`NEW EMPLOYEE WAS CREATED: ${answer.first_name} ${answer.last_name} ${answer.manager_id} ${answer.role_id} `);
+              console.log(`NEW EMPLOYEE WAS CREATED: ${answer.first_name} ${answer.last_name} ${answer.manager_id} ${answer.role_id} `);
               console.log('\n')
               init();
             }
@@ -220,5 +222,50 @@ const addEmployee = () => {
         })
     }
   )
-
 }
+
+
+const updateEmployeeRole = () => {
+
+  connection.query(`SELECT * FROM employee`, (err, employee) => {
+      if (err) throw err;
+
+      connection.query(`SELECT * FROM role`, (err, role) => {
+          if (err) throw err;
+
+          inquirer
+              .prompt([
+                  {
+                    name: "employee_id",
+                    type: "list",
+                    message: "Select the existing employee you would like to update.",
+                    choices: employee.map(employee => {
+                      return {
+                              name: `${employee.first_name} ${employee.last_name}`,
+                              value: employee.id
+                            }
+                      })
+                  },
+                  {
+                     name: "role_id",
+                     type: "list",
+                     message: "Select the new job role the chosen employee.",
+                     choices: role.map(role => {
+                      return {
+                              name: role.title,
+                              value: role.id
+                            }
+                      })
+                  }]).then((answer) => {
+                  connection.query("UPDATE employee SET ? WHERE ?",[{role_id: answer.role_id},{id: answer.employee_id}], (err) => 
+                  {if (err) throw err;
+                  console.log(`EMPLOYEE ROLE CHANGED`);
+                  });
+              });
+      })
+  })
+};
+
+
+
+
